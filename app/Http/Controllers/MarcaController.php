@@ -7,14 +7,23 @@ use Illuminate\Http\Request;
 
 class MarcaController extends Controller
 {
+    protected $marca;
+
+    public function __construct(Marca $marca)
+    {
+        $this->marca = $marca;
+    }
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() //GET all
     {
-        //
+        $marcas = $this->marca->all();
+        // $marcas = Marca::all();
+        return $marcas;
     }
 
     /**
@@ -33,9 +42,10 @@ class MarcaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request)  //POST unitário
     {
-        $marca = Marca::create($request->all());
+        // $marca = Marca::create($request->all());
+        $marca = $this->marca->create($request->all());
         return $marca;
     }
 
@@ -45,9 +55,10 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function show(Marca $marca)
+    public function show($id) //get by ID
     {
-        //
+        $marca = $this->marca->find($id);
+        return $marca;
     }
 
     /**
@@ -58,7 +69,7 @@ class MarcaController extends Controller
      */
     public function edit(Marca $marca)
     {
-        //
+        // return 'aqui';
     }
 
     /**
@@ -68,9 +79,11 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Marca $marca)
+    public function update(Request $request, $id) //PUT/PATCH atualiza dados. 
     {
-        //
+        // $marca->update($request->all());
+        $marca = $this->marca->find($id);
+        return $marca;
     }
 
     /**
@@ -79,8 +92,11 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Marca $marca)
+    public function destroy($id)
     {
-        //
+        // $marca->delete();
+        $marca = $this->marca->find($id);
+        $marca->delete();
+        return ['msg' => "A marca $marca->nome foi removida com sucesso!"];
     }
 }
